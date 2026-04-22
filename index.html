@@ -378,7 +378,7 @@
       <div class="logo-icon pulse-ring">
         <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M9 2v2M2 9h2M2 15h2M22 9h-2M22 15h-2M15 22v-2M9 22v-2"/></svg>
       </div>
-      <span class="logo-text">ZINNXS<span>TECH</span></span>
+      <span class="logo-text" id="secretLogo">ZINNXS<span>TECH</span></span>
     </a>
 
     <nav class="desktop">
@@ -842,6 +842,70 @@
   </div>
 </footer>
 
+<style>
+  /* ── Secret logo easter egg ── */
+  #secretLogo {
+    cursor: default;
+    position: relative;
+  }
+  #secretLogo:hover {
+    animation: glitch 0.3s linear;
+  }
+  @keyframes glitch {
+    0%   { text-shadow: none; }
+    20%  { text-shadow: 2px 0 #0d9e3e, -2px 0 rgba(255,0,0,0.18); letter-spacing: .12em; }
+    40%  { text-shadow: -2px 0 #076b2a, 2px 0 rgba(0,255,100,0.18); letter-spacing: .08em; }
+    60%  { text-shadow: 1px 0 #0d9e3e, -1px 0 rgba(255,0,0,0.1); }
+    80%  { text-shadow: none; letter-spacing: .1em; }
+    100% { text-shadow: none; }
+  }
+
+  /* Progress dots shown near logo while clicking */
+  #secretProgress {
+    position: fixed;
+    top: 3.8rem;
+    left: 1.25rem;
+    display: flex;
+    gap: 5px;
+    z-index: 200;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .3s;
+  }
+  #secretProgress.visible { opacity: 1; }
+  .secret-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: rgba(7,107,42,0.25);
+    border: 1px solid rgba(7,107,42,0.4);
+    transition: background .2s, box-shadow .2s;
+  }
+  .secret-dot.active {
+    background: #0d9e3e;
+    box-shadow: 0 0 6px #0d9e3e;
+  }
+
+  /* Launch flash overlay */
+  #secretFlash {
+    position: fixed; inset: 0; z-index: 9999;
+    background: radial-gradient(circle at center, rgba(13,158,62,0.18) 0%, transparent 70%);
+    pointer-events: none; opacity: 0;
+    transition: opacity .15s;
+  }
+  #secretFlash.flash { opacity: 1; }
+</style>
+
+<!-- Secret progress dots -->
+<div id="secretProgress">
+  <div class="secret-dot" id="dot1"></div>
+  <div class="secret-dot" id="dot2"></div>
+  <div class="secret-dot" id="dot3"></div>
+  <div class="secret-dot" id="dot4"></div>
+  <div class="secret-dot" id="dot5"></div>
+</div>
+
+<!-- Launch flash -->
+<div id="secretFlash"></div>
+
 <script>
   /* ── Header scroll effect ── */
   const header = document.getElementById('header');
@@ -875,6 +939,47 @@
     el.textContent = full.slice(0, ++i);
     if (i >= full.length) clearInterval(timer);
   }, 65);
+
+  /* ── Secret easter egg: 5 clicks on logo ── */
+  const secretLogo    = document.getElementById('secretLogo');
+  const secretProgress = document.getElementById('secretProgress');
+  const secretFlash   = document.getElementById('secretFlash');
+  const dots          = document.querySelectorAll('.secret-dot');
+  const SECRET_URL    = 'https://zinnxs.github.io/zinnxs.techOS/';
+  const MAX_CLICKS    = 5;
+  let   clickCount    = 0;
+  let   resetTimeout  = null;
+
+  secretLogo.addEventListener('click', (e) => {
+    e.preventDefault(); // don't follow the parent <a href="#">
+
+    clickCount++;
+    clearTimeout(resetTimeout);
+
+    // Show progress dots
+    secretProgress.classList.add('visible');
+    dots.forEach((d, idx) => d.classList.toggle('active', idx < clickCount));
+
+    if (clickCount >= MAX_CLICKS) {
+      // Flash effect then launch
+      secretFlash.classList.add('flash');
+      setTimeout(() => {
+        secretFlash.classList.remove('flash');
+        window.open(SECRET_URL, '_blank', 'noopener,noreferrer');
+        // Reset
+        clickCount = 0;
+        dots.forEach(d => d.classList.remove('active'));
+        secretProgress.classList.remove('visible');
+      }, 220);
+    } else {
+      // Auto-reset after 2s of inactivity
+      resetTimeout = setTimeout(() => {
+        clickCount = 0;
+        dots.forEach(d => d.classList.remove('active'));
+        secretProgress.classList.remove('visible');
+      }, 2000);
+    }
+  });
 </script>
 </body>
 </html>
