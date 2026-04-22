@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zinnxs Tech — Assistência Técnica Volta Redonda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    :root {
+      --green:      #076b2a;
+      --green-mid:  #0a8835;
+      --green-lite: #0d9e3e;
+      --bg:         #040d06;
+      --card:       #09180c;
+      --border:     rgba(7,107,42,0.22);
+      --glow:       0 0 28px rgba(7,107,42,0.38);
+      --glow2:      0 0 48px rgba(7,107,42,0.50);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: #ccecd8; font-family: 'Outfit', sans-serif; margin: 0; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #040d06; }
+    ::-webkit-scrollbar-thumb { background: #065020; border-radius: 3px; }
+
+    /* Grid background */
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(7,107,42,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(7,107,42,0.055) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* Text utilities */
+    .font-orbitron { font-family: 'Orbitron', sans-serif; }
+    .font-mono     { font-family: 'JetBrains Mono', monospace; }
+    .text-glow  { text-shadow: 0 0 22px rgba(7,107,42,0.75), 0 0 44px rgba(7,107,42,0.38); }
+    .text-glow2 { text-shadow: 0 0 14px rgba(10,136,53,0.55); }
+    .text-gradient {
+      background: linear-gradient(135deg, #12b84e 0%, #0a8835 55%, #076b2a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Scanline overlay */
+    @keyframes scan {
+      0%   { transform: translateY(-100%); }
+      100% { transform: translateY(100vh); }
+    }
+    .scanline {
+      position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.04;
+      background: linear-gradient(transparent 50%, rgba(0,0,0,0.35) 50%);
+      background-size: 100% 4px;
+      animation: scan 10s linear infinite;
+    }
+
+    /* Floating orbs */
+    @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(28px,-18px)} }
+    @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-18px,28px)} }
+    .orb1 { animation: float1 14s ease-in-out infinite; }
+    .orb2 { animation: float2 18s ease-in-out infinite; }
+
+    /* Pulse ring */
+    @keyframes pulse-ring {
+      0%   { transform: scale(1);   opacity: .55; }
+      100% { transform: scale(2.3); opacity: 0; }
+    }
+    .pulse-ring { position: relative; }
+    .pulse-ring::before, .pulse-ring::after {
+      content: ''; position: absolute; inset: -4px; border-radius: inherit;
+      border: 1px solid #0d9e3e;
+      animation: pulse-ring 2.2s ease-out infinite;
+    }
+    .pulse-ring::after { animation-delay: 1.1s; }
+
+    /* Nav links */
+    .nav-link {
+      position: relative; color: #6aaa7e;
+      transition: color .2s; font-size: .875rem; letter-spacing: .05em;
+      text-decoration: none;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1px; background: var(--green-mid); transform: scaleX(0); transition: transform .25s;
+    }
+    .nav-link:hover { color: var(--green-mid); }
+    .nav-link:hover::after { transform: scaleX(1); }
+
+    /* Buttons */
+    .btn-primary {
+      background: linear-gradient(135deg, #0d9e3e, #076b2a);
+      color: #fff; font-weight: 700; text-decoration: none;
+      transition: transform .2s, box-shadow .2s, filter .2s;
+      position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .btn-primary::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.13), transparent);
+      opacity: 0; transition: opacity .2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--glow2); filter: brightness(1.08); }
+    .btn-primary:hover::before { opacity: 1; }
+
+    .btn-ghost {
+      border: 1px solid rgba(7,107,42,0.5); color: #0d9e3e; text-decoration: none;
+      transition: border-color .2s, background .2s, transform .2s, box-shadow .2s;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .btn-ghost:hover {
+      background: rgba(7,107,42,0.1); border-color: var(--green-mid);
+      transform: translateY(-2px); box-shadow: var(--glow);
+    }
+
+    /* Cards */
+    .service-card {
+      background: var(--card); border: 1px solid var(--border);
+      transition: transform .25s, border-color .25s, box-shadow .25s;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(10,136,53,0.5);
+      box-shadow: var(--glow2);
+    }
+    .contact-card {
+      background: linear-gradient(135deg, #071309, #040d06);
+      border: 1px solid rgba(7,107,42,0.22);
+      transition: box-shadow .3s;
+      text-decoration: none; display: flex; align-items: flex-start; gap: 1rem;
+    }
+    .contact-card:hover { box-shadow: var(--glow2); }
+
+    /* Section divider */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(7,107,42,0.4), transparent);
+      max-width: 72rem; margin: 0 auto;
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal { animation: fadeUp .7s ease both; }
+    .d1 { animation-delay: .1s; } .d2 { animation-delay: .2s; }
+    .d3 { animation-delay: .3s; } .d4 { animation-delay: .4s; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .cursor { animation: blink 1s step-end infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    .animate-pulse { animation: pulse 2s ease-in-out infinite; }
+
+    /* Map */
+    .map-frame {
+      width: 100%; height: 300px; border: 0; border-radius: 16px;
+      filter: invert(92%) hue-rotate(132deg) brightness(0.8) saturate(1.15);
+      transition: filter .3s;
+    }
+    .map-frame:hover { filter: invert(90%) hue-rotate(132deg) brightness(0.88) saturate(1.25); }
+
+    /* ── Layout helpers ── */
+    .container { max-width: 72rem; margin: 0 auto; padding: 0 1.25rem; }
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .items-start  { align-items: flex-start; }
+    .justify-between { justify-content: space-between; }
+    .justify-center  { justify-content: center; }
+    .gap-2  { gap: .5rem; }
+    .gap-3  { gap: .75rem; }
+    .gap-4  { gap: 1rem; }
+    .gap-5  { gap: 1.25rem; }
+    .gap-6  { gap: 1.5rem; }
+    .gap-12 { gap: 3rem; }
+    .flex-wrap  { flex-wrap: wrap; }
+    .flex-1     { flex: 1; }
+    .shrink-0   { flex-shrink: 0; }
+    .min-w-0    { min-width: 0; }
+    .relative   { position: relative; }
+    .absolute   { position: absolute; }
+    .fixed      { position: fixed; }
+    .inset-0    { inset: 0; }
+    .overflow-hidden { overflow: hidden; }
+    .z-10  { z-index: 10; }
+    .z-50  { z-index: 50; }
+    .w-full { width: 100%; }
+    .h-full { height: 100%; }
+    .pointer-events-none { pointer-events: none; }
+    .text-center { text-align: center; }
+    .hidden { display: none; }
+    .opacity-0 { opacity: 0; }
+    .transition-all    { transition: all .2s; }
+    .transition-colors { transition: color .2s; }
+    .transition-opacity { transition: opacity .2s; }
+    .ml-auto { margin-left: auto; }
+    .mt-1 { margin-top: .25rem; }
+    .mb-3 { margin-bottom: .75rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-5 { margin-bottom: 1.25rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .mb-8 { margin-bottom: 2rem; }
+    .mb-14 { margin-bottom: 3.5rem; }
+    .py-24 { padding-top: 6rem; padding-bottom: 6rem; }
+    .py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+    .px-5  { padding: 0 1.25rem; }
+    .p-3   { padding: .75rem; }
+    .p-4   { padding: 1rem; }
+    .p-5   { padding: 1.25rem; }
+    .p-6   { padding: 1.5rem; }
+    .p-8   { padding: 2rem; }
+    .rounded-full { border-radius: 9999px; }
+    .rounded-lg   { border-radius: .5rem; }
+    .rounded-xl   { border-radius: .75rem; }
+    .rounded-2xl  { border-radius: 1rem; }
+    .leading-tight   { line-height: 1.25; }
+    .leading-snug    { line-height: 1.375; }
+    .leading-relaxed { line-height: 1.625; }
+    .uppercase   { text-transform: uppercase; }
+    .whitespace-pre-line { white-space: pre-line; }
+
+    /* Inline SVG icons */
+    .icon { display: inline-block; vertical-align: middle; }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      transition: background .3s, backdrop-filter .3s, border-bottom .3s;
+    }
+    header.scrolled {
+      background: rgba(4,13,6,0.94);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(7,107,42,0.15);
+    }
+    .header-inner {
+      max-width: 72rem; margin: 0 auto; padding: 0 1.25rem;
+      height: 4rem; display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; gap: .625rem; text-decoration: none; }
+    .logo-icon {
+      width: 2rem; height: 2rem; border-radius: .5rem;
+      background: linear-gradient(135deg,#0d9e3e,#065020);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-text { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: .1em; color: #0d9e3e; }
+    .logo-text span { color: #ccecd8; }
+    nav.desktop { display: none; gap: 1.75rem; align-items: center; }
+    .header-cta { display: none; gap: .5rem; align-items: center; }
+    .menu-btn {
+      background: none; border: none; cursor: pointer; padding: .5rem;
+      color: #0d9e3e; border-radius: .5rem; display: flex;
+    }
+    .mobile-nav {
+      display: none; border-top: 1px solid rgba(7,107,42,0.18);
+      background: rgba(4,13,6,0.97);
+      padding: 1.5rem 1.25rem; flex-direction: column; gap: 1.25rem;
+    }
+    .mobile-nav.open { display: flex; }
+
+    @media (min-width: 768px) {
+      nav.desktop { display: flex; }
+      .header-cta { display: flex; }
+      .menu-btn { display: none; }
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh; display: flex; align-items: center;
+      overflow: hidden; position: relative;
+    }
+    .hero-inner {
+      position: relative; z-index: 10; max-width: 72rem;
+      margin: 0 auto; padding: 6rem 1.25rem 4rem; width: 100%;
+    }
+    .hero-grid { display: grid; gap: 3rem; align-items: center; }
+    .hero-orb-wrap {
+      display: none; justify-content: center;
+      filter: drop-shadow(0 0 44px rgba(7,107,42,0.28));
+    }
+    .hero-orb { position: relative; width: 320px; height: 320px; }
+    .hero-orb-ring {
+      position: absolute; inset: 0; border-radius: 50%;
+      border: 1px solid rgba(7,107,42,0.22);
+      animation: pulse-ring 3s ease-out infinite;
+    }
+    .hero-orb-inner {
+      position: absolute; inset: 2rem; border-radius: 50%;
+      background: radial-gradient(circle,#0a1f0e 0%,#040d06 100%);
+      border: 2px solid rgba(7,107,42,0.42);
+      box-shadow: 0 0 60px rgba(7,107,42,0.2);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .orb-label {
+      position: absolute; display: flex; align-items: center; gap: .375rem;
+      border-radius: 9999px; padding: .375rem .75rem;
+      background: rgba(6,14,8,0.95); border: 1px solid rgba(7,107,42,0.35);
+      font-size: .7rem; color: #5a9a6e; font-family: 'JetBrains Mono', monospace;
+    }
+    .scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .5rem; opacity: .4;
+    }
+    @media (min-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr 1fr; }
+      .hero-orb-wrap { display: flex; }
+    }
+
+    /* ── SERVICES ── */
+    #servicos { padding: 6rem 0; position: relative; overflow: hidden; }
+    .services-grid { display: grid; gap: 1.25rem; margin-bottom: 2rem; }
+    @media (min-width: 768px) {
+      .services-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── DIFERENCIAIS ── */
+    #diferenciais { padding: 6rem 0; position: relative; overflow: hidden; }
+    .diff-grid { display: grid; gap: 1rem; }
+    @media (min-width: 640px)  { .diff-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 1024px) { .diff-grid { grid-template-columns: repeat(4,1fr); } }
+
+    /* ── CONTACT ── */
+    #localizacao { padding: 6rem 0; position: relative; overflow: hidden; }
+    .contact-grid { display: grid; gap: 1.5rem; }
+    @media (min-width: 1024px) { .contact-grid { grid-template-columns: 1fr 1fr; } }
+    .info-col { display: flex; flex-direction: column; gap: .75rem; }
+    .contact-card:hover .arrow-icon { opacity: 1; }
+    .arrow-icon { opacity: 0; transition: opacity .2s; }
+    .contact-icon-wrap {
+      width: 2.5rem; height: 2.5rem; border-radius: .75rem;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      background: rgba(7,107,42,0.13); border: 1px solid rgba(7,107,42,0.28);
+      transition: transform .2s;
+    }
+    .contact-card:hover .contact-icon-wrap { transform: scale(1.1); }
+
+    /* badge chip */
+    .badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      border-radius: 9999px; padding: .375rem 1rem;
+      font-size: .75rem; font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase; letter-spacing: .1em;
+      background: rgba(7,107,42,0.1); border: 1px solid rgba(7,107,42,0.28); color: #0d9e3e;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2.5rem 0;
+      border-top: 1px solid rgba(7,107,42,0.12);
+      background: #030b05;
+    }
+    .footer-inner {
+      max-width: 72rem; margin: 0 auto; padding: 0 1.25rem;
+      display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 1.5rem;
+    }
+    .footer-social {
+      width: 2.25rem; height: 2.25rem; border-radius: .75rem;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(7,107,42,0.1); border: 1px solid rgba(7,107,42,0.22);
+      color: #076b2a; text-decoration: none; transition: transform .2s;
+    }
+    .footer-social:hover { transform: scale(1.1); }
+    @media (min-width: 768px) { .footer-inner { flex-direction: row; } }
+  </style>
+</head>
+<body>
+
+<!-- Scanline overlay -->
+<div class="scanline"></div>
+
+<!-- ══ HEADER ══════════════════════════════════════════════════ -->
+<header id="header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon pulse-ring">
+        <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M9 2v2M2 9h2M2 15h2M22 9h-2M22 15h-2M15 22v-2M9 22v-2"/></svg>
+      </div>
+      <span class="logo-text">ZINNXS<span>TECH</span></span>
+    </a>
+
+    <nav class="desktop">
+      <a href="#servicos"     class="nav-link font-mono uppercase">Serviços</a>
+      <a href="#diferenciais" class="nav-link font-mono uppercase">Diferenciais</a>
+      <a href="#localizacao"  class="nav-link font-mono uppercase">Localização</a>
+      <a href="#contato"      class="nav-link font-mono uppercase">Contato</a>
+    </nav>
+
+    <div class="header-cta">
+      <a href="https://share.google/3nVBwqFTv3GrntRdT" target="_blank" rel="noopener noreferrer"
+        class="btn-ghost rounded-lg" style="padding:.5rem 1rem; font-size:.75rem; font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.05em; gap:.375rem;">
+        <svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Google
+      </a>
+      <a href="https://wa.me/5524999225630" target="_blank" rel="noopener noreferrer"
+        class="btn-primary rounded-lg" style="padding:.5rem 1.25rem; font-family:'Orbitron',sans-serif; font-size:.875rem; letter-spacing:.05em;">
+        Fazer Orçamento
+      </a>
+    </div>
+
+    <button class="menu-btn" id="menuBtn" aria-label="Menu">
+      <svg id="iconMenu" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <svg id="iconClose" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#servicos"     class="nav-link font-mono uppercase" style="font-size:1rem;" onclick="closeMobile()">Serviços</a>
+    <a href="#diferenciais" class="nav-link font-mono uppercase" style="font-size:1rem;" onclick="closeMobile()">Diferenciais</a>
+    <a href="#localizacao"  class="nav-link font-mono uppercase" style="font-size:1rem;" onclick="closeMobile()">Localização</a>
+    <a href="#contato"      class="nav-link font-mono uppercase" style="font-size:1rem;" onclick="closeMobile()">Contato</a>
+    <a href="https://share.google/3nVBwqFTv3GrntRdT" target="_blank" rel="noopener noreferrer"
+      class="btn-ghost rounded-xl" style="padding:.75rem 1.25rem; font-size:.875rem; font-family:'JetBrains Mono',monospace; gap:.5rem;" onclick="closeMobile()">
+      <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Ver no Google Negócios
+    </a>
+    <a href="https://wa.me/5524999225630" target="_blank" rel="noopener noreferrer"
+      class="btn-primary rounded-xl" style="padding:.75rem 1.25rem; font-family:'Orbitron',sans-serif; font-size:.875rem; letter-spacing:.05em; text-align:center;" onclick="closeMobile()">
+      Fazer Orçamento
+    </a>
+  </div>
+</header>
+
+<!-- ══ MAIN ═══════════════════════════════════════════════════ -->
+<main>
+
+  <!-- ── HERO ──────────────────────────────────────────────── -->
+  <section id="hero" class="grid-bg">
+    <!-- Orbs -->
+    <div class="orb1 absolute" style="top:-8rem;left:-8rem;width:24rem;height:24rem;border-radius:50%;background:radial-gradient(circle,rgba(7,107,42,0.16) 0%,transparent 70%);pointer-events:none;"></div>
+    <div class="orb2 absolute" style="bottom:-8rem;right:-8rem;width:24rem;height:24rem;border-radius:50%;background:radial-gradient(circle,rgba(7,107,42,0.10) 0%,transparent 70%);pointer-events:none;"></div>
+    <!-- Corner decorations -->
+    <div class="absolute" style="top:5rem;right:2rem;width:1px;height:8rem;opacity:.25;background:linear-gradient(to bottom,#0d9e3e,transparent);"></div>
+    <div class="absolute" style="top:5rem;right:2rem;width:8rem;height:1px;opacity:.25;background:linear-gradient(to right,#0d9e3e,transparent);"></div>
+
+    <div class="hero-inner">
+      <div class="hero-grid">
+        <!-- Left column -->
+        <div>
+          <div class="reveal badge mb-6" style="display:inline-flex;">
+            <span class="w-2 h-2 rounded-full animate-pulse" style="width:.5rem;height:.5rem;border-radius:50%;background:#076b2a;display:inline-block;"></span>
+            Assistência Técnica — Volta Redonda
+          </div>
+
+          <h1 class="reveal d1 font-orbitron" style="font-weight:900;line-height:1.2;margin-bottom:1.5rem;font-size:clamp(2.2rem,6vw,4rem);color:#e2f5e8;">
+            <span id="typedText"></span><span class="cursor" style="color:#0d9e3e;">_</span>
+          </h1>
+
+          <p class="reveal d2" style="font-size:clamp(1rem,2vw,1.125rem);line-height:1.625;margin-bottom:2rem;color:#6aaa7e;max-width:500px;">
+            Especialistas em serviços de
+            <span class="text-glow2" style="color:#0d9e3e;">Hardware</span> e
+            <span class="text-glow2" style="color:#0d9e3e;">Software</span>.
+            Deixe sua máquina nova de novo com a Zinnxs Tech.
+          </p>
+
+          <div class="reveal d3 flex flex-wrap" style="gap:.75rem;margin-bottom:2rem;">
+            <a href="https://wa.me/5524999225630" target="_blank" rel="noopener noreferrer"
+              class="btn-primary rounded-xl" style="padding:.875rem 1.75rem;font-family:'Orbitron',sans-serif;font-size:.875rem;letter-spacing:.05em;gap:.5rem;">
+              <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Faça seu orçamento!
+            </a>
+            <a href="#servicos"
+              class="btn-ghost rounded-xl" style="padding:.875rem 1.75rem;font-family:'Orbitron',sans-serif;font-size:.875rem;letter-spacing:.05em;gap:.5rem;">
+              Ver Serviços
+              <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </a>
+          </div>
+
+          <div class="reveal d4 flex flex-wrap" style="gap:1.25rem;">
+            <div class="flex items-center gap-2">
+              <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span class="font-mono" style="font-size:.75rem;color:#4a8a5e;">Diagnóstico em 24h</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>
+              <span class="font-mono" style="font-size:.75rem;color:#4a8a5e;">60 dias de garantia</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span class="font-mono" style="font-size:.75rem;color:#4a8a5e;">Avaliação 5★ Google</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: visual orb -->
+        <div class="hero-orb-wrap">
+          <div class="hero-orb">
+            <div class="hero-orb-ring"></div>
+            <div class="hero-orb-inner">
+              <svg class="icon" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#076b2a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="opacity:.92"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M9 2v2M2 9h2M2 15h2M22 9h-2M22 15h-2M15 22v-2M9 22v-2"/></svg>
+            </div>
+            <!-- Floating labels around orb -->
+            <div class="orb-label" style="left:calc(160px + 150px * 0.866 - 48px); top:calc(160px + 150px * -0.5 - 20px);">
+              <svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#076b2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              Hardware
+            </div>
+            <div class="orb-label" style="left:calc(160px + 150px * 0 - 48px); top:calc(160px + 150px * 1 - 20px);">
+              <svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#076b2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Software
+            </div>
+            <div class="orb-label" style="left:calc(160px + 150px * -0.866 - 48px); top:calc(160px + 150px * -0.5 - 20px);">
+              <svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#076b2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+              Storage
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="scroll-hint">
+      <span class="font-mono" style="font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:#3a6a4a;">scroll</span>
+      <div style="width:1px;height:3rem;background:linear-gradient(to bottom,#0a8835,transparent);"></div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ── SERVICES ──────────────────────────────────────────── -->
+  <section id="servicos">
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 0%,rgba(7,107,42,0.07) 0%,transparent 60%);"></div>
+    <div class="container" style="position:relative;z-index:10;">
+      <div class="text-center mb-14">
+        <div class="badge" style="display:inline-flex;margin-bottom:1rem;">
+          <svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          O que fazemos
+        </div>
+        <h2 class="font-orbitron" style="font-weight:900;font-size:clamp(1.8rem,4vw,2.8rem);color:#e2f5e8;margin-bottom:1rem;">
+          Nossos <span class="text-gradient">Serviços</span>
+        </h2>
+        <p style="max-width:28rem;margin:0 auto;font-size:1rem;color:#4a7a5a;">
+          Soluções completas para manter sua máquina rodando no máximo desempenho.
+        </p>
+      </div>
+
+      <div class="services-grid">
+        <!-- Hardware column -->
+        <div class="rounded-2xl overflow-hidden" style="border:1px solid rgba(10,136,53,0.25);">
+          <div class="flex items-center gap-3" style="padding:1rem 1.25rem;background:rgba(10,136,53,0.07);border-bottom:1px solid rgba(10,136,53,0.13);">
+            <div style="width:2.25rem;height:2.25rem;border-radius:.75rem;background:rgba(10,136,53,0.12);border:1px solid rgba(10,136,53,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg class="icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <span class="font-orbitron" style="font-weight:700;font-size:.875rem;letter-spacing:.05em;text-transform:uppercase;color:#0a8835;">Hardware</span>
+          </div>
+          <div class="p-3 flex flex-col gap-2" style="background:var(--card);">
+            <!-- items -->
+            <div class="service-card rounded-xl flex items-center gap-3" style="padding:.75rem 1rem;">
+              <div style="width:2rem;height:2rem;border-radius:.5rem;background:rgba(10,136,53,0.08);border:1px solid rgba(10,136,53,0.19);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <p style="font-size:.875rem;font-weight:500;line-height:1.375;color:#ccecd8;">Limpeza Preventiva Completa</p>
+            </div>
+            <div class="service-card rounded-xl flex items-center gap-3" style="padding:.75rem 1rem;">
+              <div style="width:2rem;height:2rem;border-radius:.5rem;background:rgba(10,136,53,0.08);border:1px solid rgba(10,136,53,0.19);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M9 2v2M2 9h2M2 15h2M22 9h-2M22 15h-2M15 22v-2M9 22v-2"/></svg>
+              </div>
+              <p style="font-size:.875rem;font-weight:500;line-height:1.375;color:#ccecd8;">Montagem de PC Standard/Office</p>
+            </div>
+            <div class="service-card rounded-xl flex items-center gap-3" style="padding:.75rem 1rem;">
+              <div style="width:2rem;height:2rem;border-radius:.5rem;background:rgba(10,136,53,0.08);border:1px solid rgba(10,136,53,0.19);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <p style="font-size:.875rem;font-weight:500;line-height:1.375;color:#ccecd8;">Montagem de PC Gamer</p>
+            </div>
+            <div class="service-card rounded-xl flex items-center gap-3" style="padding:.75rem 1rem;">
+              <div style="width:2rem;height:2rem;border-radius:.5rem;background:rgba(10,136,53,0.08);border:1px solid rgba(10,136,53,0.19);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              </div>
+              <p style="font-size:.875rem;font-weight:500;line-height:1.375;color:#ccecd8;">Limpeza de Periféricos</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Software column -->
+        <div class="rounded-2xl overflow-hidden" style="border:1px solid rgba(7,107,42,0.25);">
+          <div class="flex items-center gap-3" style="padding:1rem 1.25rem;background:rgba(7,107,42,0.07);border-bottom:1px solid rgba(7,107,42,0.13);">
+            <div style="width:2.25rem;height:2.25rem;border-radius:.75rem;background:rgba(7,107,42,0.12);border:1px solid rgba(7,107,42,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg class="icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#076b2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><path d="M7 7h.01"/></svg>
+            </div>
+            <span class="font-orbitron" style="font-weight:700;font-size:.875rem;letter-spacing:.05em;text-transform:uppercase;color:#076b2a;">Software</span>
+          </div>
+          <div class="p-3 flex flex-col gap-2" style="background:var(--card);">
+            <div class="service-card rounded-xl flex items-center gap-3" style="padding:.75rem 1rem;">
+              <div style="width:2rem;height:2rem;border-radius:.5rem;background:rgba(7,107,42,0.08);border:1px solid rgba(7,107,42,0.19);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#076b2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+              </div>
+              <p style="font-size:.875rem;font-weight:500;line-height:1.375;color:#ccecd8;">Formatação com Backup</p>
+            </div>
+            <div class="service-card rounded-xl flex items-center gap-3" style="padding:.75rem 1rem;">
+              <div style="width:2rem;height:2rem;border-radius:.5rem;background:rgba(7,107,42,0.08);border:1px solid rgba(7,107,42,0.19);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#076b2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+              </div>
+              <p style="font-size:.875rem;font-weight:500;line-height:1.375;color:#ccecd8;">Formatação "Limpa"</p>
+            </div>
+            <div class="service-card rounded-xl flex items-center gap-3" style="padding:.75rem 1rem;">
+              <div style="width:2rem;height:2rem;border-radius:.5rem;background:rgba(7,107,42,0.08);border:1px solid rgba(7,107,42,0.19);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#076b2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </div>
+              <p style="font-size:.875rem;font-weight:500;line-height:1.375;color:#ccecd8;">Instalação de Drivers</p>
+            </div>
+            <div class="service-card rounded-xl flex items-center gap-3" style="padding:.75rem 1rem;">
+              <div style="width:2rem;height:2rem;border-radius:.5rem;background:rgba(7,107,42,0.08);border:1px solid rgba(7,107,42,0.19);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#076b2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+              </div>
+              <p style="font-size:.875rem;font-weight:500;line-height:1.375;color:#ccecd8;">Otimização de Sistema</p>
+            </div>
+            <div class="service-card rounded-xl flex items-center gap-3" style="padding:.75rem 1rem;">
+              <div style="width:2rem;height:2rem;border-radius:.5rem;background:rgba(7,107,42,0.08);border:1px solid rgba(7,107,42,0.19);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#076b2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </div>
+              <p style="font-size:.875rem;font-weight:500;line-height:1.375;color:#ccecd8;">Instalação de Pacotes Essenciais</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <div class="flex items-center justify-center gap-2 rounded-full" style="display:inline-flex;padding:.625rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:.875rem;background:rgba(7,107,42,0.08);border:1px dashed rgba(7,107,42,0.32);color:#3a6a4a;">
+          <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#076b2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          E muito mais... Entre em contato e tire suas dúvidas!
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ── DIFERENCIAIS ───────────────────────────────────────── -->
+  <section id="diferenciais">
+    <div class="absolute inset-0 grid-bg pointer-events-none" style="opacity:.45;"></div>
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 0% 50%,rgba(7,107,42,0.06) 0%,transparent 55%);"></div>
+    <div class="container" style="position:relative;z-index:10;">
+      <div class="text-center mb-14">
+        <div class="badge" style="display:inline-flex;margin-bottom:1rem;">
+          <svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>
+          Por que a Zinnxs Tech?
+        </div>
+        <h2 class="font-orbitron" style="font-weight:900;font-size:clamp(1.8rem,4vw,2.8rem);color:#e2f5e8;">
+          Nossos <span class="text-gradient">Diferenciais</span>
+        </h2>
+      </div>
+
+      <div class="diff-grid">
+        <!-- Card 1 -->
+        <div class="service-card rounded-2xl p-6 flex flex-col gap-3">
+          <div style="width:2.75rem;height:2.75rem;border-radius:.75rem;background:rgba(7,107,42,0.14);border:1px solid rgba(7,107,42,0.3);box-shadow:0 0 18px rgba(7,107,42,0.18);display:flex;align-items:center;justify-content:center;">
+            <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3 class="font-orbitron" style="font-weight:700;font-size:.875rem;line-height:1.375;color:#d4eedd;">Diagnóstico em até 24h</h3>
+          <p style="font-size:.75rem;line-height:1.625;flex:1;color:#4a7a5a;">Avaliamos e enviamos o orçamento completo em no máximo 24 horas após a entrega do equipamento. Sem enrolação.</p>
+        </div>
+        <!-- Card 2 -->
+        <div class="service-card rounded-2xl p-6 flex flex-col gap-3">
+          <div style="width:2.75rem;height:2.75rem;border-radius:.75rem;background:rgba(7,107,42,0.14);border:1px solid rgba(7,107,42,0.3);box-shadow:0 0 18px rgba(7,107,42,0.18);display:flex;align-items:center;justify-content:center;">
+            <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>
+          </div>
+          <h3 class="font-orbitron" style="font-weight:700;font-size:.875rem;line-height:1.375;color:#d4eedd;">60 Dias de Garantia</h3>
+          <p style="font-size:.75rem;line-height:1.625;flex:1;color:#4a7a5a;">Todos os nossos serviços têm 60 dias de garantia. O problema voltou? A gente resolve sem custo adicional.</p>
+        </div>
+        <!-- Card 3 -->
+        <div class="service-card rounded-2xl p-6 flex flex-col gap-3">
+          <div style="width:2.75rem;height:2.75rem;border-radius:.75rem;background:rgba(7,107,42,0.14);border:1px solid rgba(7,107,42,0.3);box-shadow:0 0 18px rgba(7,107,42,0.18);display:flex;align-items:center;justify-content:center;">
+            <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3 class="font-orbitron" style="font-weight:700;font-size:.875rem;line-height:1.375;color:#d4eedd;">Orçamento Sem Compromisso</h3>
+          <p style="font-size:.75rem;line-height:1.625;flex:1;color:#4a7a5a;">Receba o diagnóstico e o valor antes de qualquer decisão. Você aprova antes de a gente começar.</p>
+        </div>
+        <!-- Card 4 -->
+        <div class="service-card rounded-2xl p-6 flex flex-col gap-3">
+          <div style="width:2.75rem;height:2.75rem;border-radius:.75rem;background:rgba(7,107,42,0.14);border:1px solid rgba(7,107,42,0.3);box-shadow:0 0 18px rgba(7,107,42,0.18);display:flex;align-items:center;justify-content:center;">
+            <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <h3 class="font-orbitron" style="font-weight:700;font-size:.875rem;line-height:1.375;color:#d4eedd;">Avaliado no Google</h3>
+          <p style="font-size:.75rem;line-height:1.625;flex:1;color:#4a7a5a;">Confira as opiniões de clientes reais no nosso perfil do Google Negócios e veja você mesmo.</p>
+          <a href="https://share.google/3nVBwqFTv3GrntRdT" target="_blank" rel="noopener noreferrer"
+            class="font-mono transition-colors" style="display:inline-flex;align-items:center;gap:.375rem;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:#0a8835;text-decoration:none;margin-top:.25rem;"
+            onmouseover="this.style.color='#0d9e3e'" onmouseout="this.style.color='#0a8835'">
+            Ver avaliações
+            <svg class="icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ── CONTACT & LOCATION ─────────────────────────────────── -->
+  <section id="localizacao">
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 100% 50%,rgba(7,107,42,0.06) 0%,transparent 60%);"></div>
+    <div class="container" style="position:relative;z-index:10;">
+      <div class="text-center mb-14">
+        <div class="badge" style="display:inline-flex;margin-bottom:1rem;">
+          <svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          Venha nos visitar
+        </div>
+        <h2 class="font-orbitron" style="font-weight:900;font-size:clamp(1.8rem,4vw,2.8rem);color:#e2f5e8;">
+          Onde nos <span class="text-gradient">encontrar</span>
+        </h2>
+      </div>
+
+      <div class="contact-grid" id="contato">
+        <!-- Info column -->
+        <div class="info-col">
+          <!-- Address -->
+          <a href="https://www.google.com/maps/place/?q=place_id:ChIJt59xDlOZngARijuI8ndLErY" target="_blank" rel="noopener noreferrer"
+            class="contact-card rounded-2xl p-4">
+            <div class="contact-icon-wrap">
+              <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="font-mono" style="font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.125rem;color:#2e5a3a;">Endereço</p>
+              <p style="font-weight:600;font-size:.875rem;line-height:1.625;white-space:pre-line;color:#b8ddc4;">Av. General Euclides de Figueiredo, 57&#10;Retiro, Volta Redonda - RJ</p>
+            </div>
+            <svg class="icon arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-top:.25rem;flex-shrink:0;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <!-- WhatsApp -->
+          <a href="https://wa.me/5524999225630" target="_blank" rel="noopener noreferrer"
+            class="contact-card rounded-2xl p-4">
+            <div class="contact-icon-wrap">
+              <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.9-.9a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 16v.92Z"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="font-mono" style="font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.125rem;color:#2e5a3a;">WhatsApp</p>
+              <p style="font-weight:600;font-size:.875rem;line-height:1.625;color:#b8ddc4;">(24) 99922-5630</p>
+            </div>
+            <svg class="icon arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-top:.25rem;flex-shrink:0;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <!-- Instagram -->
+          <a href="https://instagram.com/Zinnxs.tech" target="_blank" rel="noopener noreferrer"
+            class="contact-card rounded-2xl p-4">
+            <div class="contact-icon-wrap">
+              <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="font-mono" style="font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.125rem;color:#2e5a3a;">Instagram</p>
+              <p style="font-weight:600;font-size:.875rem;line-height:1.625;color:#b8ddc4;">@Zinnxs.tech</p>
+            </div>
+            <svg class="icon arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-top:.25rem;flex-shrink:0;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <!-- Google Business -->
+          <a href="https://share.google/3nVBwqFTv3GrntRdT" target="_blank" rel="noopener noreferrer"
+            class="contact-card rounded-2xl p-4">
+            <div class="contact-icon-wrap">
+              <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="font-mono" style="font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.125rem;color:#2e5a3a;">Google Negócios</p>
+              <p style="font-weight:600;font-size:.875rem;line-height:1.625;color:#b8ddc4;">Zinnxs Tech — veja avaliações e horários</p>
+            </div>
+            <svg class="icon arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-top:.25rem;flex-shrink:0;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+
+          <!-- Map embed -->
+          <div class="rounded-2xl overflow-hidden" style="border:1px solid rgba(7,107,42,0.22);margin-top:.25rem;">
+            <iframe
+              src="https://maps.google.com/maps?q=-22.501645,-44.1261517&z=17&output=embed"
+              class="map-frame"
+              title="Localização Zinnxs Tech"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+
+        <!-- CTA card -->
+        <div class="rounded-2xl p-8 flex flex-col relative overflow-hidden"
+          style="background:linear-gradient(135deg,#071309 0%,#040d06 100%);border:1px solid rgba(7,107,42,0.32);box-shadow:0 0 60px rgba(7,107,42,0.09);">
+          <div class="absolute inset-0 pointer-events-none"
+            style="background-image:radial-gradient(rgba(7,107,42,0.07) 1px,transparent 1px);background-size:24px 24px;"></div>
+          <div style="position:relative;z-index:10;display:flex;flex-direction:column;height:100%;">
+            <div style="width:3rem;height:3rem;border-radius:50%;background:rgba(7,107,42,0.14);border:1px solid rgba(7,107,42,0.36);box-shadow:0 0 24px rgba(7,107,42,0.24);display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;">
+              <svg class="icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a8835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <h3 class="font-orbitron" style="font-weight:900;font-size:1.5rem;margin-bottom:.75rem;line-height:1.25;color:#e2f5e8;">
+              Pronto para melhorar<br>
+              <span class="text-gradient">seu setup?</span>
+            </h3>
+            <p style="font-size:.875rem;line-height:1.625;margin-bottom:1.25rem;color:#3a5e46;">
+              Fale agora pelo WhatsApp. Orçamento em até 24 horas, com 60 dias de garantia no serviço.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-6">
+              <span class="flex items-center gap-2 rounded-full" style="padding:.25rem .75rem;font-size:.75rem;font-family:'JetBrains Mono',monospace;background:rgba(7,107,42,0.12);border:1px solid rgba(7,107,42,0.26);color:#3a6a4a;">
+                <svg class="icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#076b2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                24h p/ orçamento
+              </span>
+              <span class="flex items-center gap-2 rounded-full" style="padding:.25rem .75rem;font-size:.75rem;font-family:'JetBrains Mono',monospace;background:rgba(7,107,42,0.12);border:1px solid rgba(7,107,42,0.26);color:#3a6a4a;">
+                <svg class="icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#076b2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                60 dias garantia
+              </span>
+              <span class="flex items-center gap-2 rounded-full" style="padding:.25rem .75rem;font-size:.75rem;font-family:'JetBrains Mono',monospace;background:rgba(7,107,42,0.12);border:1px solid rgba(7,107,42,0.26);color:#3a6a4a;">
+                <svg class="icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#076b2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Sem compromisso
+              </span>
+            </div>
+            <a href="https://wa.me/5524999225630" target="_blank" rel="noopener noreferrer"
+              class="btn-primary rounded-xl w-full gap-3" style="padding:1rem 1.75rem;font-family:'Orbitron',sans-serif;font-size:.875rem;letter-spacing:.05em;margin-bottom:.75rem;">
+              <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Chamar no WhatsApp
+              <svg class="icon ml-auto" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a href="https://share.google/3nVBwqFTv3GrntRdT" target="_blank" rel="noopener noreferrer"
+              class="btn-ghost rounded-xl w-full gap-2" style="padding:.75rem 1.75rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;letter-spacing:.05em;">
+              <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              Ver no Google Negócios
+              <svg class="icon ml-auto" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <a href="#" class="logo">
+      <div style="width:1.75rem;height:1.75rem;border-radius:.5rem;background:linear-gradient(135deg,#0d9e3e,#065020);display:flex;align-items:center;justify-content:center;">
+        <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M9 2v2M2 9h2M2 15h2M22 9h-2M22 15h-2M15 22v-2M9 22v-2"/></svg>
+      </div>
+      <span class="font-orbitron" style="font-weight:700;font-size:.875rem;letter-spacing:.1em;color:#0a8835;">ZINNXS<span style="color:#5a8a6a;">TECH</span></span>
+    </a>
+    <p class="font-mono" style="font-size:.75rem;text-align:center;color:#1e3e28;">
+      © 2026 Zinnxs Tech. Todos os direitos reservados.
+    </p>
+    <div class="flex items-center gap-3">
+      <a href="https://wa.me/5524999225630" target="_blank" rel="noopener noreferrer" title="WhatsApp" class="footer-social">
+        <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.9-.9a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 16v.92Z"/></svg>
+      </a>
+      <a href="https://instagram.com/Zinnxs.tech" target="_blank" rel="noopener noreferrer" title="Instagram" class="footer-social">
+        <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a href="https://share.google/3nVBwqFTv3GrntRdT" target="_blank" rel="noopener noreferrer" title="Google Negócios" class="footer-social">
+        <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ── Header scroll effect ── */
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  /* ── Mobile menu toggle ── */
+  const menuBtn    = document.getElementById('menuBtn');
+  const mobileNav  = document.getElementById('mobileNav');
+  const iconMenu   = document.getElementById('iconMenu');
+  const iconClose  = document.getElementById('iconClose');
+
+  menuBtn.addEventListener('click', () => {
+    const isOpen = mobileNav.classList.toggle('open');
+    iconMenu.style.display  = isOpen ? 'none'  : 'block';
+    iconClose.style.display = isOpen ? 'block' : 'none';
+  });
+
+  function closeMobile() {
+    mobileNav.classList.remove('open');
+    iconMenu.style.display  = 'block';
+    iconClose.style.display = 'none';
+  }
+
+  /* ── Typewriter effect ── */
+  const full = "Precisa de um reparo?";
+  let i = 0;
+  const el = document.getElementById('typedText');
+  const timer = setInterval(() => {
+    el.textContent = full.slice(0, ++i);
+    if (i >= full.length) clearInterval(timer);
+  }, 65);
+</script>
+</body>
+</html>
