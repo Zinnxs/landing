@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Outfit', system-ui, sans-serif;
+  --font-orbitron: 'Orbitron', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  --color-hud-bg: var(--theme-hud-bg);
+  --color-hud-panel: var(--theme-hud-panel);
+  --color-hud-border: var(--theme-hud-border);
+  --color-hud-text: var(--theme-hud-text);
+  --color-hud-muted: var(--theme-hud-muted);
+  --color-hud-accent: var(--theme-hud-accent);
+  --color-hud-accent-bright: var(--theme-hud-accent-bright);
+}
+
+:root {
+  --theme-hud-bg: #030504;
+  --theme-hud-panel: #070a08;
+  --theme-hud-border: #131f16;
+  --theme-hud-text: #c0d1c7;
+  --theme-hud-muted: #5e7365;
+  --theme-hud-accent: #005D30;
+  --theme-hud-accent-bright: #008a45;
+  --theme-hud-bg-grad: #081a10;
+  --theme-scanline-black: rgba(0, 0, 0, 0.2);
+}
+
+:root.light-mode {
+  --theme-hud-bg: #e8f0eb;
+  --theme-hud-panel: #dbe4de;
+  --theme-hud-border: #b8c9c0;
+  --theme-hud-text: #132418;
+  --theme-hud-muted: #4a6654;
+  --theme-hud-accent: #005D30;
+  --theme-hud-accent-bright: #008a45;
+  --theme-hud-bg-grad: #b5ccbf;
+  --theme-scanline-black: rgba(0, 0, 0, 0.05);
+}
+
+body {
+  background-color: var(--theme-hud-bg);
+  background-image: radial-gradient(ellipse at top, var(--theme-hud-bg-grad) 0%, var(--theme-hud-bg) 70%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: var(--color-hud-text);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+.bg-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, var(--color-hud-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-hud-border) 1px, transparent 1px);
+}
+
+.scanline {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    transparent 50%,
+    var(--theme-scanline-black) 50%,
+    var(--theme-scanline-black)
+  );
+  background-size: 100% 4px;
+}

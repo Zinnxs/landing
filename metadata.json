@@ -1,0 +1,6 @@
+{
+  "name": "Zinnxs Tech",
+  "description": "Assistência Técnica em Volta Redonda - Refatorada com estética Cyber Brutalist HUD",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
