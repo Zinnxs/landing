@@ -85,7 +85,7 @@ export default function Header() {
             )}
           </a>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map(link => (
               <a key={link.name} href={link.href} className="font-mono text-xs uppercase tracking-widest text-hud-muted hover:text-hud-text transition-colors relative group">
                 {link.name}
@@ -94,7 +94,7 @@ export default function Header() {
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-4">
             <button 
               onClick={toggleTheme} 
               className="flex items-center justify-center w-8 h-8 border border-hud-border bg-hud-panel text-hud-muted hover:text-hud-text hover:border-hud-accent transition-colors"
@@ -110,7 +110,7 @@ export default function Header() {
             </a>
           </div>
 
-          <div className="md:hidden flex items-center gap-3">
+          <div className="lg:hidden flex items-center gap-3">
             <button 
               onClick={toggleTheme} 
               className="flex items-center justify-center w-8 h-8 border border-hud-border bg-hud-panel text-hud-muted hover:text-hud-text transition-colors"
@@ -126,7 +126,7 @@ export default function Header() {
 
       {/* Mobile Nav */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-hud-bg/95 backdrop-blur-sm border-b border-hud-border flex flex-col pt-20 px-4 pb-4 md:hidden">
+        <div className="fixed inset-0 z-40 bg-hud-bg/95 backdrop-blur-sm border-b border-hud-border flex flex-col pt-20 px-4 pb-4 lg:hidden">
           <nav className="flex flex-col gap-6 p-4 border border-hud-border bg-hud-panel">
             {navLinks.map(link => (
               <a key={link.name} href={link.href} onClick={() => setMobileMenuOpen(false)} className="font-mono text-sm uppercase tracking-widest text-hud-muted hover:text-hud-text transition-colors border-b border-hud-border pb-2">
